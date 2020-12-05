@@ -19,16 +19,16 @@ func GetDateRange(start, stop string) ([]string, error) {
 		return nil, err
 	}
 
-	var flag int
-	diffDay := int64(math.Abs(startTime.Sub(stopTime).Hours() / 24))
-	if stopTime.Before(startTime) {
-		flag = -1
-	} else {
-		flag = 1
-	}
+	diffDays := int(math.Abs(startTime.Sub(stopTime).Hours() / 24))
 
-	for i := 0; i <= int(diffDay); i++ {
-		list = append(list, startTime.AddDate(0, 0, i*flag).Format("2006-01-02"))
+	if stopTime.Before(startTime) {
+		for i := 0; i <= diffDays; i++ {
+			list = append(list, startTime.AddDate(0, 0, -i).Format("2006-01-02"))
+		}
+	} else {
+		for i := 0; i <= diffDays; i++ {
+			list = append(list, startTime.AddDate(0, 0, i).Format("2006-01-02"))
+		}
 	}
 
 	return list, nil
